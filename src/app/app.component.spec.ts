@@ -1,35 +1,19 @@
-import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import {AppModule} from 'src/app/app.module';
+import { Shallow } from 'shallow-render';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
-  }));
+  let shallow: Shallow<AppComponent>;
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
+  beforeEach(() => {
+    shallow = new Shallow(AppComponent, AppModule);
   });
 
-  it(`should have as title 'ng8-shallow'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('ng8-shallow');
-  });
+  it(`has as title 'ng8-shallow'`, async () => {
+    const {find} = await shallow.render();
+    const title = find('h1');
 
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to ng8-shallow!');
+    expect(title).toHaveFound(1);
+    expect(title.nativeElement.textContent).toContain('Welcome to ng8-shallow!');
   });
 });
